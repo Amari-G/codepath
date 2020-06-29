@@ -35,7 +35,7 @@ public class BookDetailActivity extends AppCompatActivity {
         book = (Book) Parcels.unwrap(getIntent().getParcelableExtra(Book.class.getSimpleName()));
         // Use book object to populate data into views
 
-        getSupportActionBar().setTitle(book.getTitle());
+//        getSupportActionBar().setTitle(book.getTitle());
         tvTitle.setText(book.getTitle());
         tvAuthor.setText(book.getAuthor());
 
