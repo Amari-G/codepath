@@ -3,9 +3,11 @@ package com.codepath.apps.restclienttemplate;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -26,6 +28,7 @@ public class TimelineActivity extends AppCompatActivity {
     RecyclerView mRecyclerViewTweets;
     List<Tweet> mTweets;
     TweetsAdapter mAdapter;
+    SwipeRefreshLayout mSwipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,19 @@ public class TimelineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timeline);
 
         mClient = TwitterApp.getRestClient(this);
+
+        mSwipeContainer = findViewById(R.id.swipeContainer);
+        mSwipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i(TAG, "Fetching new data");
+                populateHomeTimeline();
+            }
+        });
 
         // Find the recycler view
         mRecyclerViewTweets = findViewById(R.id.rvTweets);
@@ -53,8 +69,10 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.i(TAG, "onSuccess!" + json.toString());
                 JSONArray jsonArray = json.jsonArray;
                 try {
-                    mTweets.addAll(Tweet.fromJsonArray(jsonArray));
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.clear();
+                    mAdapter.addAll(Tweet.fromJsonArray(jsonArray));
+                    // Now we call setRefreshing(false) to signal refresh has finished
+                    mSwipeContainer.setRefreshing(false);
                 } catch (JSONException e) {
                     Log.e(TAG, "JSON exception", e);
                     e.printStackTrace();
@@ -64,6 +82,9 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.e(TAG, "onFailure:" + response, throwable);
+                if (mSwipeContainer.isRefreshing()) {
+                    mSwipeContainer.setRefreshing(false);
+                }
             }
         });
     }
