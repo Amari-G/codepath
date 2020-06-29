@@ -1,6 +1,7 @@
 package com.codepath.android.booksearch.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +13,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.android.booksearch.R;
+import com.codepath.android.booksearch.activities.BookDetailActivity;
 import com.codepath.android.booksearch.models.Book;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +57,19 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     clickListener.onItemClick(itemView, getAdapterPosition());
+
+                    int position = getAdapterPosition();
+
+                    if (position != RecyclerView.NO_POSITION) {
+                        // get the book at the position, this won't work if the class is static
+                        Book book = mBooks.get(position);
+                        // create intent for the new activity
+                        Intent intent = new Intent(getContext(), BookDetailActivity.class);
+                        // serialize the book using parceler, use its short name as a key
+                        intent.putExtra(Book.class.getSimpleName(), Parcels.wrap(book));
+                        // show the activity
+                        getContext().startActivity(intent);
+                    }
                 }
             });
         }

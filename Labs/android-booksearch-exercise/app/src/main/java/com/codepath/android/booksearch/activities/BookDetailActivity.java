@@ -1,18 +1,26 @@
 package com.codepath.android.booksearch.activities;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.android.booksearch.R;
+import com.codepath.android.booksearch.models.Book;
+
+import org.parceler.Parcels;
 
 public class BookDetailActivity extends AppCompatActivity {
     private ImageView ivBookCover;
     private TextView tvTitle;
     private TextView tvAuthor;
+
+    Book book;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +32,16 @@ public class BookDetailActivity extends AppCompatActivity {
         tvAuthor = (TextView) findViewById(R.id.tvAuthor);
 
         // Extract book object from intent extras
-
+        book = (Book) Parcels.unwrap(getIntent().getParcelableExtra(Book.class.getSimpleName()));
         // Use book object to populate data into views
+
+        getSupportActionBar().setTitle(book.getTitle());
+        tvTitle.setText(book.getTitle());
+        tvAuthor.setText(book.getAuthor());
+
+        int radius = 20; // corner radius, higher value = more rounded
+        int margin = 10; // crop margin, set to 0 for corners with no crop
+        Glide.with(this).load(book.getCoverUrl()).fitCenter().into(ivBookCover);
     }
 
 
