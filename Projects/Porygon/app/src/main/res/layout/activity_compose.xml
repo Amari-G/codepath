@@ -4,23 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".ComposeTweetActivity">
 
-    <EditText
-        android:id="@+id/composeTweetEditText"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tweetButton"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="@string/compose_tweet_hint"
-        android:inputType="textMultiLine"
-        android:minLines="5" />
+        android:layout_marginTop="8dp"
+        app:hintEnabled="false"
+        app:counterEnabled="true"
+        app:counterMaxLength="280">
+
+        <EditText
+            android:id="@+id/composeTweetEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tweetButton"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="@string/compose_tweet_hint"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:minLines="5" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/tweetButton"
@@ -28,8 +38,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
         android:background="@color/blue"
         android:clickable="false"
         android:text="@string/compose_tweet_button"
