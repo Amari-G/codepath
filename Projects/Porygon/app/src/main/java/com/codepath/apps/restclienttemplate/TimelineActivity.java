@@ -5,13 +5,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
-import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +33,7 @@ public class TimelineActivity extends AppCompatActivity {
     TweetsAdapter mAdapter;
     SwipeRefreshLayout mSwipeContainer;
     EndlessRecyclerViewScrollListener mScrollListener;
+    FloatingActionButton mTweetButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +44,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         mSwipeContainer = findViewById(R.id.swipeContainer);
         mSwipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+                android.R.color.holo_green_light);
         mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -53,7 +54,7 @@ public class TimelineActivity extends AppCompatActivity {
         });
 
         // Find the recycler view
-        mRecyclerViewTweets = findViewById(R.id.rvTweets);
+        mRecyclerViewTweets = findViewById(R.id.tweetsRecyclerView);
         // Initialize the list of tweets and adapter
         mTweets = new ArrayList<>();
         mAdapter = new TweetsAdapter(this, mTweets);
@@ -71,14 +72,21 @@ public class TimelineActivity extends AppCompatActivity {
             }
         };
 
-        // Adds ths scroll listener to RecyclerView
+        // Adds this scroll listener to RecyclerView
         mRecyclerViewTweets.addOnScrollListener(mScrollListener);
 
+        mTweetButton = findViewById(R.id.composeTweetButton);
+        mTweetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(TimelineActivity.this, "Compose new tweet", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(TimelineActivity.this, ComposeTweetActivity.class);
+                startActivity(intent);
+            }
+        });
 
         populateHomeTimeline();
     }
-
-
 
     private void loadMoreData() {
         // Send an API request to retrieve appropriate paginated data
