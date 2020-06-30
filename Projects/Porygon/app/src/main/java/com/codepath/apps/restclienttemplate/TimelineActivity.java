@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ import okhttp3.Headers;
 public class TimelineActivity extends AppCompatActivity {
 
     private static final String TAG = "TimelineActivity";
+    private final int REQUEST_CODE = 20;
 
     TwitterClient mClient;
     RecyclerView mRecyclerViewTweets;
@@ -81,11 +84,31 @@ public class TimelineActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Toast.makeText(TimelineActivity.this, "Compose new tweet", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(TimelineActivity.this, ComposeTweetActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
 
         populateHomeTimeline();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        // Check if request code matches and if result is okay
+        Log.i(TAG, "onActivityResult: ");
+
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            // Get data from intent sent from ComposeTweetActivity
+            Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
+
+            // Update the recycler view with the tweet
+            //Modify data source
+            mTweets.add(0, tweet);
+            // Update the adapter
+            mAdapter.notifyItemInserted(0);
+            mRecyclerViewTweets.smoothScrollToPosition(0);
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void loadMoreData() {
@@ -99,9 +122,9 @@ public class TimelineActivity extends AppCompatActivity {
                 JSONArray jsonArray = json.jsonArray;
                 try {
                     List<Tweet> tweets = Tweet.fromJsonArray(jsonArray);
-                //  --> Append the new data objects to the existing set of items inside the array of items
+                    //  --> Append the new data objects to the existing set of items inside the array of items
                     mAdapter.addAll(tweets);
-                //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
+                    //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
                     mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
