@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:background="@color/blue"
+        android:background="@color/twitter_blue"
         android:clickable="false"
         android:text="@string/compose_tweet_button"
         android:textAllCaps="false"

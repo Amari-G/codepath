@@ -21,8 +21,7 @@ public class Tweet {
     public User user;
     public String mediaUrl;
 
-    public Tweet() {
-    }
+    public Tweet() {}
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         // Parse data from JSONObject
