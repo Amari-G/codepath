@@ -19,9 +19,10 @@ public class Tweet {
     public String body;
     public String createdAt;
     public User user;
-    public String imageUrl;
+    public String mediaUrl;
 
-    public Tweet() {}
+    public Tweet() {
+    }
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         // Parse data from JSONObject
@@ -34,18 +35,25 @@ public class Tweet {
         // Check if tweet contains an image
         // Get entities, then check entities for a media array
         Log.i(TAG, jsonObject.getJSONObject("entities").toString());
-        Log.i(TAG, "fromJson: Tweet has media: " + jsonObject.getJSONObject("entities").has("media"));
-
-        // If tweet contains an image, get image url
-        if (jsonObject.getJSONObject("entities").has("media")) {
-            // Retrieve the media object from the Tweet JSON
-            // NOTE: this only takes the first object in the array
-            JSONObject mediaObject = jsonObject.getJSONObject("entities")
-                    .getJSONArray("media").getJSONObject(0);
-            tweet.imageUrl = mediaObject.getString("media_url_https");
-        }
+        checkForPhoto(jsonObject, tweet);
 
         return tweet;
+    }
+
+    // If tweet contains an image, set media url
+    private static void checkForPhoto(JSONObject jsonObject, Tweet tweet) throws JSONException {
+        if (jsonObject.getJSONObject("entities").has("media")) {
+            // Retrieve the media object from the Tweet JSON
+            // NOTE: this only takes the first image
+            JSONObject mediaObject = jsonObject.getJSONObject("entities")
+                    .getJSONArray("media").getJSONObject(0);
+
+            if (mediaObject.getString("type").equals("photo")) {
+                tweet.mediaUrl = mediaObject.getString("media_url_https");
+                tweet.mediaUrl = tweet.getFormattedUrl(tweet.mediaUrl, "thumb");
+                Log.i(TAG, "fromJson: Tweet has media: " + tweet.mediaUrl);
+            }
+        }
     }
 
     // Generate a list of Tweets from a JSONArray
@@ -57,5 +65,12 @@ public class Tweet {
         }
 
         return tweets;
+    }
+
+    private String getFormattedUrl (String mediaUrl, String name) {
+        String baseUrl = mediaUrl.substring(0, mediaUrl.length()-4);
+        String format = mediaUrl.substring(mediaUrl.length() - 3, mediaUrl.length());
+
+        return String.format("%s?format=%s&name=%s", baseUrl, format, name);
     }
 }

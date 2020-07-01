@@ -55,22 +55,31 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     // Define a ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView ivProfileImage;
+        ImageView profileImageView;
+        ImageView mediaImageView;
 
-        TextView tvBody;
-        TextView tvScreenName;
+        TextView bodyTextView;
+        TextView screenNameTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivProfileImage = itemView.findViewById(R.id.profileImageView);
-            tvBody = itemView.findViewById(R.id.tweetBodyTextView);
-            tvScreenName = itemView.findViewById(R.id.screenNameTextView);
+            profileImageView = itemView.findViewById(R.id.profileImageView);
+            mediaImageView = itemView.findViewById(R.id.mediaImageView);
+            bodyTextView = itemView.findViewById(R.id.tweetBodyTextView);
+            screenNameTextView = itemView.findViewById(R.id.screenNameTextView);
         }
 
         public void bind(Tweet tweet) {
-            tvBody.setText(tweet.body);
-            tvScreenName.setText(tweet.user.screenName);
-            Glide.with(mContext).load(tweet.user.profileImageUrl).into(ivProfileImage);
+            bodyTextView.setText(tweet.body);
+            screenNameTextView.setText(tweet.user.screenName);
+            Glide.with(mContext).load(tweet.user.profileImageUrl).into(profileImageView);
+
+            if (tweet.mediaUrl == null) {
+                mediaImageView.setVisibility(View.GONE);
+            } else {
+                mediaImageView.setVisibility(View.VISIBLE);
+                Glide.with(mContext).load(tweet.mediaUrl).fitCenter().into(mediaImageView);
+            }
         }
     }
 

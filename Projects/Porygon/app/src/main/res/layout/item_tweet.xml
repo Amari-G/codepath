@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/profileImageView"
         tools:text="\@amariwgarrett" />
@@ -31,8 +31,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/screenNameTextView"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/profileImageView"
         tools:text="This is my tweet" />
+
+    <ImageView
+        android:id="@+id/mediaImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxHeight="64dp"
+        android:layout_below="@+id/tweetBodyTextView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:layout_toEndOf="@+id/profileImageView"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
 </RelativeLayout>
