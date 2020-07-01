@@ -13,10 +13,10 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        app:titleTextColor="@android:color/white" />
+        app:titleTextColor="@android:color/black" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvBooks"
+        android:id="@+id/recyclerViewBooks"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

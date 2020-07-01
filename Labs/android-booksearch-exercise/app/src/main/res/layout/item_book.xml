@@ -5,27 +5,27 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/ivBookCover"
+        android:id="@+id/bookImageView"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_margin="8dp" />
 
     <TextView
-        android:id="@+id/tvTitle"
+        android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_toRightOf="@+id/ivBookCover"
+        android:layout_toRightOf="@+id/bookImageView"
         android:text="Title"
         android:textSize="24sp" />
 
     <TextView
-        android:id="@+id/tvAuthor"
+        android:id="@+id/authorTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTitle"
+        android:layout_below="@+id/titleTextView"
         android:layout_marginLeft="8dp"
-        android:layout_toRightOf="@+id/ivBookCover"
+        android:layout_toRightOf="@+id/bookImageView"
         android:text="Author"
         android:textSize="12sp" />
 </RelativeLayout>

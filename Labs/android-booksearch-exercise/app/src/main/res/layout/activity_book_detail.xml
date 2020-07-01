@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="0dp"
-    tools:context=".activities.BookDetailActivity">
+    tools:context=".activities.BookDetailsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        app:titleTextColor="@android:color/white"/>
+        app:titleTextColor="@android:color/black"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,24 +21,24 @@
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/ivBookCover"
+            android:id="@+id/bookImageView"
             android:layout_width="280dp"
             android:layout_height="280dp" />
 
         <TextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/titleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ivBookCover"
+            android:layout_below="@+id/bookImageView"
             android:layout_marginTop="8dp"
             android:textSize="32sp"
             tools:text="Book Title" />
 
         <TextView
-            android:id="@+id/tvAuthor"
+            android:id="@+id/authorTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvTitle"
+            android:layout_below="@+id/titleTextView"
             android:layout_marginTop="8dp"
             android:textSize="22sp"
             tools:text="Author" />

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.android.booksearch.R;
-import com.codepath.android.booksearch.activities.BookDetailActivity;
+import com.codepath.android.booksearch.activities.BookDetailsActivity;
 import com.codepath.android.booksearch.models.Book;
 
 import org.parceler.Parcels;
@@ -49,9 +49,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             // to access the context from any ViewHolder instance.
             super(itemView);
 
-            ivCover = (ImageView)itemView.findViewById(R.id.ivBookCover);
-            tvTitle = (TextView)itemView.findViewById(R.id.tvTitle);
-            tvAuthor = (TextView)itemView.findViewById(R.id.tvAuthor);
+            ivCover = (ImageView)itemView.findViewById(R.id.bookImageView);
+            tvTitle = (TextView)itemView.findViewById(R.id.titleTextView);
+            tvAuthor = (TextView)itemView.findViewById(R.id.authorTextView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -64,7 +64,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                         // get the book at the position, this won't work if the class is static
                         Book book = mBooks.get(position);
                         // create intent for the new activity
-                        Intent intent = new Intent(getContext(), BookDetailActivity.class);
+                        Intent intent = new Intent(getContext(), BookDetailsActivity.class);
                         // serialize the book using parceler, use its short name as a key
                         intent.putExtra(Book.class.getSimpleName(), Parcels.wrap(book));
                         // show the activity

@@ -29,10 +29,10 @@ import okhttp3.Headers;
 
 
 public class BookListActivity extends AppCompatActivity {
-    private RecyclerView rvBooks;
-    private BookAdapter bookAdapter;
-    private BookClient client;
-    private ArrayList<Book> abooks;
+    private RecyclerView mBooksRecyclerView;
+    private BookAdapter mBookAdapter;
+    private BookClient mClient;
+    private ArrayList<Book> mBooks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +42,12 @@ public class BookListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        rvBooks = findViewById(R.id.rvBooks);
-        abooks = new ArrayList<>();
+        mBooksRecyclerView = findViewById(R.id.recyclerViewBooks);
+        mBooks = new ArrayList<>();
 
         // Initialize the adapter
-        bookAdapter = new BookAdapter(this, abooks);
-        bookAdapter.setOnItemClickListener(new BookAdapter.OnItemClickListener() {
+        mBookAdapter = new BookAdapter(this, mBooks);
+        mBookAdapter.setOnItemClickListener(new BookAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
                 Toast.makeText(
@@ -63,10 +63,10 @@ public class BookListActivity extends AppCompatActivity {
         });
 
         // Attach the adapter to the RecyclerView
-        rvBooks.setAdapter(bookAdapter);
+        mBooksRecyclerView.setAdapter(mBookAdapter);
 
         // Set layout manager to position the items
-        rvBooks.setLayoutManager(new LinearLayoutManager(this));
+        mBooksRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Fetch the data remotely
 //        fetchBooks("Oscar Wilde");
@@ -75,8 +75,8 @@ public class BookListActivity extends AppCompatActivity {
     // Executes an API call to the OpenLibrary search endpoint, parses the results
     // Converts them into an array of book objects and adds them to the adapter
     private void fetchBooks(String query) {
-        client = new BookClient();
-        client.getBooks(query, new JsonHttpResponseHandler() {
+        mClient = new BookClient();
+        mClient.getBooks(query, new JsonHttpResponseHandler() {
 
 
             @Override
@@ -89,12 +89,12 @@ public class BookListActivity extends AppCompatActivity {
                         // Parse json array into array of model objects
                         final ArrayList<Book> books = Book.fromJson(docs);
                         // Remove all books from the adapter
-                        abooks.clear();
+                        mBooks.clear();
                         // Load model objects into the adapter
                         for (Book book : books) {
-                            abooks.add(book); // add book through the adapter
+                            mBooks.add(book); // add book through the adapter
                         }
-                        bookAdapter.notifyDataSetChanged();
+                        mBookAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {
                     // Invalid JSON format, show appropriate error.
