@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.codepath.apps.restclienttemplate.models.JsonDate;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
+
+    private static final String TAG = "TweetsAdapter";
 
     Context mContext;
     List<Tweet> mTweets;
@@ -59,26 +66,47 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView mediaImageView;
 
         TextView bodyTextView;
+        TextView nameTextView;
         TextView screenNameTextView;
+        TextView elapsedTimeTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             profileImageView = itemView.findViewById(R.id.profileImageView);
             mediaImageView = itemView.findViewById(R.id.mediaImageView);
             bodyTextView = itemView.findViewById(R.id.tweetBodyTextView);
+            nameTextView = itemView.findViewById(R.id.nameTextView);
             screenNameTextView = itemView.findViewById(R.id.screenNameTextView);
+            elapsedTimeTextView = itemView.findViewById(R.id.elapsedTimeTextView);
+
         }
 
         public void bind(Tweet tweet) {
             bodyTextView.setText(tweet.body);
-            screenNameTextView.setText(tweet.user.screenName);
-            Glide.with(mContext).load(tweet.user.profileImageUrl).into(profileImageView);
+            nameTextView.setText(tweet.user.name);
+
+            String userHandle = "@" + tweet.user.screenName;
+            screenNameTextView.setText(userHandle);
+
+            String elapsedTime = " · " + JsonDate.getElapsedTime(tweet.createdAt);
+            elapsedTimeTextView.setText(elapsedTime);
+
+            String profileImageUrl = tweet.user.profileImageUrl;
+            profileImageUrl = profileImageUrl.replace("_normal", "");
+
+//            StringBuffer stringBuffer = new StringBuffer(tweet.user.profileImageUrl);
+//            stringBuffer.insert(profileImageUrl.length() - 4, "_mini");
+//
+//            profileImageUrl = stringBuffer.toString();
+            Log.i(TAG, "User profile image url: " + profileImageUrl);
+
+            Glide.with(mContext).load(profileImageUrl).transform(new CircleCrop()).into(profileImageView);
 
             if (tweet.mediaUrl == null) {
                 mediaImageView.setVisibility(View.GONE);
             } else {
                 mediaImageView.setVisibility(View.VISIBLE);
-                Glide.with(mContext).load(tweet.mediaUrl).fitCenter().into(mediaImageView);
+                Glide.with(mContext).load(tweet.mediaUrl).fitCenter().transform(new RoundedCornersTransformation(40, 10)).into(mediaImageView);
             }
         }
     }

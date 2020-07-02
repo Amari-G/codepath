@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    >
+    android:layout_margin="16dp">
 
     <ImageView
         android:id="@+id/profileImageView"
@@ -15,38 +14,70 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
+        android:layout_marginEnd="16dp"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/screenNameTextView"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/profileImageView"
-        tools:text="\@amariwgarrett" />
+        android:layout_toEndOf="@id/profileImageView">
 
-    <TextView
-        android:id="@+id/tweetBodyTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/screenNameTextView"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="2dp"
-        android:layout_toEndOf="@+id/profileImageView"
-        tools:text="This is my tweet" />
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            tools:text="Display Name" />
+
+        <TextView
+            android:id="@+id/screenNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_toEndOf="@+id/nameTextView"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="14sp"
+            tools:text="\@userhandle" />
+
+        <TextView
+            android:id="@+id/elapsedTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="0dp"
+            android:layout_toEndOf="@+id/screenNameTextView"
+            android:maxLines="1"
+            android:textSize="14sp"
+            tools:text="5m ago" />
+
+        <TextView
+            android:id="@+id/tweetBodyTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/screenNameTextView"
+            android:layout_alignParentStart="true"
+            android:layout_marginVertical="4dp"
+            android:layout_marginStart="0dp"
+            tools:text="This is my tweet" />
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/mediaImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxHeight="64dp"
-        android:layout_below="@+id/tweetBodyTextView"
+        android:layout_below="@+id/textView"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
         android:layout_toEndOf="@+id/profileImageView"
+        android:maxHeight="64dp"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 </RelativeLayout>

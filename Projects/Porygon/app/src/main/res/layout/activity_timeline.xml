@@ -28,7 +28,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/blue"
+        android:backgroundTint="@color/twitter_blue"
         app:borderWidth="0dp"
         app:srcCompat="@drawable/vector_compose_fab" />
 
