@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +12,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -25,12 +28,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Headers;
 
-import static androidx.recyclerview.widget.DividerItemDecoration.HORIZONTAL;
 import static androidx.recyclerview.widget.DividerItemDecoration.VERTICAL;
 
 public class TimelineActivity extends AppCompatActivity {
@@ -40,22 +43,28 @@ public class TimelineActivity extends AppCompatActivity {
 
     TwitterClient mClient;
     TweetDao mTweetDao;
+    TweetsAdapter mAdapter;
+
+    Toolbar mToolbar;
     RecyclerView mRecyclerViewTweets;
     List<Tweet> mTweets;
-    TweetsAdapter mAdapter;
     SwipeRefreshLayout mSwipeContainer;
     EndlessRecyclerViewScrollListener mScrollListener;
     FloatingActionButton mTweetButton;
+//    MenuItem mLoadingMenuItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
+
         mClient = TwitterApp.getRestClient(this);
         mTweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
 
-
+        mToolbar = findViewById(R.id.timelineToolbar);
+//        mLoadingMenuItem = findViewById(R.id.loadingProgressMenuItem);
         mSwipeContainer = findViewById(R.id.swipeContainer);
         mSwipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light);
@@ -105,18 +114,51 @@ public class TimelineActivity extends AppCompatActivity {
         });
 
         // Query for existing tweets in the database
-        AsyncTask.execute(new Runnable() {
+//        AsyncTask.execute(new Runnable() {
+//            @Override
+//            public void run() {
+////                showProgressBar();
+//                Toast.makeText(TimelineActivity.this, "We're in Async", Toast.LENGTH_SHORT).show();
+//                Log.i(TAG, "Showing data from database");
+//                List<TweetWithUser> tweetWithUsers = mTweetDao.recentItems();
+//                List<Tweet> tweetsFromDB = TweetWithUser.getTweetList(tweetWithUsers);
+//                mAdapter.clear();
+//                mAdapter.addAll(tweetsFromDB);
+////                hideProgressBar();
+//            }
+//        });
+    }
+
+
+    @Override
+    protected void onStart() {
+        class DownloadFilesTask extends AsyncTask<Void, Integer, Long> {
+            protected void onProgressUpdate(Integer... progress) {
+
+            }
+
             @Override
-            public void run() {
+            protected Long doInBackground(Void... voids) {
+//                showProgressBar();
                 Log.i(TAG, "Showing data from database");
                 List<TweetWithUser> tweetWithUsers = mTweetDao.recentItems();
                 List<Tweet> tweetsFromDB = TweetWithUser.getTweetList(tweetWithUsers);
                 mAdapter.clear();
                 mAdapter.addAll(tweetsFromDB);
+//                hideProgressBar();
+                return 0L;
             }
-        });
+
+            protected void onPostExecute(Long result) {
+                Toast.makeText(TimelineActivity.this, "We finished Async", Toast.LENGTH_SHORT).show();
+                hideProgressBar();
+            }
+        }
+
+        new DownloadFilesTask().execute();
 
         populateHomeTimeline();
+        super.onStart();
     }
 
     @Override
@@ -140,6 +182,7 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void loadMoreData() {
+        showProgressBar();
         // Send an API request to retrieve appropriate paginated data
         //  --> Send the request including an offset value (i.e `page`) as a query parameter.
         mClient.getNextPageOfTweets(new JsonHttpResponseHandler() {
@@ -157,17 +200,20 @@ public class TimelineActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.e(TAG, "onFailure for loadMoreData", throwable);
+                hideProgressBar();
             }
         }, mTweets.get(mTweets.size() - 1).id);
 
     }
 
     private void populateHomeTimeline() {
+        showProgressBar();
         mClient.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
@@ -199,6 +245,7 @@ public class TimelineActivity extends AppCompatActivity {
                     Log.e(TAG, "JSON exception", e);
                     e.printStackTrace();
                 }
+                hideProgressBar();
             }
 
             @Override
@@ -207,7 +254,19 @@ public class TimelineActivity extends AppCompatActivity {
                 if (mSwipeContainer.isRefreshing()) {
                     mSwipeContainer.setRefreshing(false);
                 }
+                hideProgressBar();
             }
         });
+    }
+
+
+    public void showProgressBar() {
+        // Show progress item
+        mToolbar.getMenu().getItem(0).setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        mToolbar.getMenu().getItem(0).setVisible(false);
     }
 }

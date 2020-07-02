@@ -6,10 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".TimelineActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/timelineToolbar"
+        app:title="Timeline"
+        app:menu="@menu/timeline_menu"/>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:layout_below="@id/timelineToolbar">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tweetsRecyclerView"
@@ -19,6 +28,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="0dp"
             android:layout_marginTop="0dp" />
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
