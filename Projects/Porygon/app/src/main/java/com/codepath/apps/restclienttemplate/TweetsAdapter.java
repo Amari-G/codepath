@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.codepath.apps.restclienttemplate.models.JsonDate;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -79,6 +82,23 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             screenNameTextView = itemView.findViewById(R.id.screenNameTextView);
             elapsedTimeTextView = itemView.findViewById(R.id.elapsedTimeTextView);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+
+                    if (position != RecyclerView.NO_POSITION){
+                        // get the tweet at the position
+                        Tweet tweet = mTweets.get(position);
+                        // create intent for the new activity
+                        Intent intent = new Intent(mContext, TweetDetailsActivity.class);
+                        // serialize the tweet using parceler, use its short name as a key
+                        intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(tweet));
+                        // show the activity
+                        mContext.startActivity(intent);
+                    }
+                }
+            });
         }
 
         public void bind(Tweet tweet) {

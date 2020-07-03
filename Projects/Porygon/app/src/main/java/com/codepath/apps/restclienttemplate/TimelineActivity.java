@@ -139,18 +139,15 @@ public class TimelineActivity extends AppCompatActivity {
 
             @Override
             protected Long doInBackground(Void... voids) {
-//                showProgressBar();
                 Log.i(TAG, "Showing data from database");
                 List<TweetWithUser> tweetWithUsers = mTweetDao.recentItems();
                 List<Tweet> tweetsFromDB = TweetWithUser.getTweetList(tweetWithUsers);
                 mAdapter.clear();
                 mAdapter.addAll(tweetsFromDB);
-//                hideProgressBar();
                 return 0L;
             }
 
             protected void onPostExecute(Long result) {
-                Toast.makeText(TimelineActivity.this, "We finished Async", Toast.LENGTH_SHORT).show();
                 hideProgressBar();
             }
         }
