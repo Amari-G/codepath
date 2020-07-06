@@ -32,7 +32,17 @@ The following **stretch** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://github.com/Amari-G/codepath/blob/master/Kap/porygon.gif' />
+**Infinite Scroll**
+
+<img src='https://github.com/Amari-G/codepath/blob/master/Kap/inf_scroll.gif' />
+
+**Compose Tweet**
+
+<img src='https://github.com/Amari-G/codepath/blob/master/Kap/compose.gif' />
+
+**Persistence**
+
+<img src='https://github.com/Amari-G/codepath/blob/master/Kap/persistence.gif' />
 
 GIFs created with [Kap](http://www.getkap.co/).
 
